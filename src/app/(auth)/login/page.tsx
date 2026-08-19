@@ -19,8 +19,16 @@ export default function LoginPage() {
     setError(undefined);
     setLoading(true);
     try {
-      await login(String(form.get('email')), String(form.get('password')));
-      router.push('/account');
+      const user = await login(
+         String(form.get('email')),
+         String(form.get('password'))
+      );
+
+      if (user.role === 'ADMIN') {
+         router.push('/admin/dashboard');
+      } else {
+         router.push('/account');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to sign in');
       setLoading(false);
